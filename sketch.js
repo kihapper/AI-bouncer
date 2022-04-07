@@ -3,6 +3,8 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+// const { react } = require("babel-types");
+
 /* ===
 ml5 Example
 Creating a regression extracting features of MobileNet. Build with p5js.
@@ -17,12 +19,19 @@ let samples = 0;
 let positionX = 140;
 let prediction = 0;
 
+let gameState = "INITIAL"
+
+let savedTime;
+let totalTime = 5000;
+let countEllipse = 0;
+
+//"INITIAL" "TRAINING" "BOUNCER_ACTIVE" "END"
+
+
 let title_text;
 let input_text1;
 let input_text2;
 
-
-let bounceStarted = false;
 
 function preload() {
   bot0 = loadImage('./images/AI-Bouncer-01.png');
@@ -34,8 +43,7 @@ function preload() {
 }
 
 function setup() {
-  // var = myCanvas = createCanvas(340, 280);
-
+  savedTime = millis(); // since we've put this inside setup(), millis() stops running once draw() begins
     var myCanvas = createCanvas(900, 900);
     myCanvas.parent("right_p5js_container");
 
@@ -70,40 +78,64 @@ function setup() {
 
 function draw() {
   background(0, 0, 0);
+    // Calculate how much time has passed
 
-  if(bounceStarted){
-    drawbot();
-    input_text1 = document.getElementById("input1").value;
-    input_text2 = document.getElementById("input2").value;
-    title_text.innerHTML = "Get Past the Bouncer by looking " + input_text1 + " !!"
 
-  }
-  else{
-    image(bot0,0,0,900,900)
+  switch (gameState) {
+    case "INITIAL":
+      image(bot0,0,0,900,900);
+      break;
+    case "BOUNCER_ACTIVE":
+      input_text1 = document.getElementById("input1").value;
+      input_text2 = document.getElementById("input2").value;
+      title_text.innerHTML = "Get Past the Bouncer by looking " + input_text1 + " !!";
+      drawbot();
+      break;
+    case "END":
+      tint(0, 13, 254); // Tint blue
+      image(bot0,0,0,900,900);
+      break;
+    default:
+      //  
   }
 
   image(video, 178, 370, 340, 280);
   noStroke();
   fill(255, 0, 0);
-  // rect(positionX, 400, 50, 50);
 }
 
 function drawbot(){
 
   if(prediction < 20 ){
     image(bot1,0,0,900,900)
+    savedTime = millis(); 
   }
   else if (prediction >= 20 && prediction <40 ){
     image(bot2,0,0,900,900)
+    savedTime = millis(); 
   }
   else if (prediction >= 40 && prediction <60 ){
     image(bot3,0,0,900,900)
+    savedTime = millis(); 
   }
   else if (prediction >= 60 && prediction <80 ){
     image(bot4,0,0,900,900)
+    savedTime = millis(); 
   }
   else if (prediction >= 80 && prediction <110 ){
     image(bot5,0,0,900,900)
+    let passedTime = millis() - savedTime;
+    let timerXpos = map(passedTime, 0, 5000, 0, width);
+    fill(255);
+    ellipse(timerXpos, 45, 35, 35);
+
+    console.log(passedTime);    
+      // Has five seconds passed?
+    if (passedTime > totalTime) {
+    console.log("5 seconds have passed!");
+    savedTime = millis(); // Save the current time to restart the timer!
+    gameState= "END";
+  }
   }
 }
 
@@ -119,7 +151,6 @@ function videoReady() {
 
 // Classify the current frame.
 function predict() {
-  bounceStarted = true;
   regressor.predict(gotResults);
 }
 
@@ -146,7 +177,13 @@ function setupButtons() {
   });
 
   // Predict Button
-  select('#buttonPredict').mousePressed(predict);
+  // select('#buttonPredict').mousePressed(predict);
+
+  select('#buttonPredict').mousePressed(function() {
+    gameState = "BOUNCER_ACTIVE";
+    predict();
+  });
+
 }
 
 // Show the results
@@ -154,7 +191,6 @@ function gotResults(err, result) {
   positionX = map(result, 0, 1, 0, width);
   prediction = Math.floor(result*100)
 
-  console.log(prediction);
   slider.value(result);
   predict();
 }
