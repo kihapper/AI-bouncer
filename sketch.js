@@ -42,6 +42,8 @@ function preload() {
   clubFont = loadFont('./assets/GT-Cinetype-Mono.otf');
 
   door = loadImage('./images/AI-Bouncer-Door.png');
+  end_door1 = loadImage('./images/end_door.png');
+  end_door2 = loadImage('./images/end_door2.png');
 
   bot0 = loadImage('./images/AI-Bouncer-01.png');
   bot1 = loadImage('./images/AI-Bouncer-02.png');
@@ -111,7 +113,6 @@ function setup() {
 
 function draw() {
 
-  // image(gif1_loadImg, 50, 50);
   
   // updates animation frames by using an html
   // img element, positioning it over top of
@@ -133,6 +134,7 @@ function draw() {
       // playBotSound();
       break;
     case "END":
+      image(end_door1,0,0,900,900);
       image(bot5,0,0,900,900);
       break;
     case "DEBUG":
@@ -142,8 +144,10 @@ function draw() {
       //  
   }
 
-  // rect(184,757,290,20)
-
+  // textFont(clubFont);
+  // textAlign(CENTER);
+  // textSize(17);
+  // text("Fun-o-meter", 330, 772);
 
   image(video, 158, 370, 340, 280);
   noStroke();
@@ -184,13 +188,19 @@ function drawbot(){
       textAlign(CENTER);
       textSize(19);
       text(input_text1 + " Club", 670, 105);
-  
+
       //draw rect bar on the right
       let predictionX = map(prediction,0,100,0,290);
 
-      // rect(184,757,290,20)
 
+      let bg_mainColor = color(0, 250, 200, 100);
+      fill(bg_mainColor);
       rect(184,757,predictionX,20)
+
+      fill(mainColor);
+      textSize(17);
+      text(input_text1 +"-o-meter", 330, 772);
+
 }
 
 function playBotSound(sound_number){
