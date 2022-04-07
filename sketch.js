@@ -28,6 +28,7 @@ let countEllipse = 0;
 
 let mainColor;
 
+// var gif1_loadImg, gif1_createImg;
 
 //"INITIAL" "TRAINING" "BOUNCER_ACTIVE" "END"
 
@@ -48,6 +49,9 @@ function preload() {
   bot3 = loadImage('./images/AI-Bouncer-04.png');
   bot4 = loadImage('./images/AI-Bouncer-05.png');
   bot5 = loadImage('./images/AI-Bouncer-06.png');
+
+  // gif1_loadImg = loadImage("./images/door.gif");
+  // gif1_createImg = createImg("./images/door.gif");
 
   //https://lingojam.com/RobotVoiceGenerator
   soundFormats('wav');
@@ -81,7 +85,7 @@ function setup() {
    var constraints = {
     audio: false,
     video: {
-      facingMode: "environment",
+      facingMode: "user",
       frameRate: 15
     }
    }; 
@@ -106,6 +110,14 @@ function setup() {
 }
 
 function draw() {
+
+  // image(gif1_loadImg, 50, 50);
+  
+  // updates animation frames by using an html
+  // img element, positioning it over top of
+  // the canvas.
+  // gif1_createImg.position(820, 350);
+
   background(15, 40, 35);
     // Calculate how much time has passed
   switch (gameState) {
@@ -121,8 +133,7 @@ function draw() {
       // playBotSound();
       break;
     case "END":
-      tint(0, 13, 254); // Tint blue
-      image(bot0,0,0,900,900);
+      image(bot5,0,0,900,900);
       break;
     case "DEBUG":
       DoorEndingAnimation();
