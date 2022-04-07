@@ -3,7 +3,6 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-// const { react } = require("babel-types");
 
 /* ===
 ml5 Example
@@ -22,8 +21,13 @@ let prediction = 0;
 let gameState = "INITIAL"
 
 let savedTime;
-let totalTime = 5000;
+let savedTimeSound;
+
+let totalTime = 4000;
 let countEllipse = 0;
+
+let mainColor;
+
 
 //"INITIAL" "TRAINING" "BOUNCER_ACTIVE" "END"
 
@@ -34,17 +38,42 @@ let input_text2;
 
 
 function preload() {
+  clubFont = loadFont('./assets/GT-Cinetype-Mono.otf');
+
+  door = loadImage('./images/AI-Bouncer-Door.png');
+
   bot0 = loadImage('./images/AI-Bouncer-01.png');
   bot1 = loadImage('./images/AI-Bouncer-02.png');
   bot2 = loadImage('./images/AI-Bouncer-03.png');
   bot3 = loadImage('./images/AI-Bouncer-04.png');
   bot4 = loadImage('./images/AI-Bouncer-05.png');
   bot5 = loadImage('./images/AI-Bouncer-06.png');
+
+  //https://lingojam.com/RobotVoiceGenerator
+  soundFormats('wav');
+
+  S_Next = loadSound('./sound/0_Next.wav');
+  S_Welcome = loadSound('./sound/5_welcome.wav');
+
+  S1_notBelong = loadSound('./sound/1_Youdontlooklikeyoubelong.wav');
+  S1_NotOurType = loadSound('./sound/2_Notourtype.wav');
+
+  S2_WhyHere = loadSound('./sound/2_whyareyouhere.wav');
+  S2_Ha = loadSound('./sound/1_Ha.wav');
+  S2_Comeagain = loadSound('./sound/2_Comeagaininayear.wav');
+
+  S3_Hmm = loadSound('./sound/3_Hmm.wav');
+  S3_Aha = loadSound('./sound/4_Aha.wav');
+  S3_Interesting = loadSound('./sound/4_Interesting.wav');
+
+
 }
 
 function setup() {
+  mainColor = color(0, 250, 200);
   savedTime = millis(); // since we've put this inside setup(), millis() stops running once draw() begins
-    var myCanvas = createCanvas(900, 900);
+  savedTimeSound =  millis();
+  var myCanvas = createCanvas(900, 900);
     myCanvas.parent("right_p5js_container");
 
   // Create a video element
@@ -77,10 +106,8 @@ function setup() {
 }
 
 function draw() {
-  background(0, 0, 0);
+  background(15, 40, 35);
     // Calculate how much time has passed
-
-
   switch (gameState) {
     case "INITIAL":
       image(bot0,0,0,900,900);
@@ -89,54 +116,120 @@ function draw() {
       input_text1 = document.getElementById("input1").value;
       input_text2 = document.getElementById("input2").value;
       title_text.innerHTML = "Get Past the Bouncer by looking " + input_text1 + " !!";
+      
       drawbot();
+      // playBotSound();
       break;
     case "END":
       tint(0, 13, 254); // Tint blue
       image(bot0,0,0,900,900);
       break;
+    case "DEBUG":
+      DoorEndingAnimation();
+      break;
     default:
       //  
   }
 
-  image(video, 178, 370, 340, 280);
+  // rect(184,757,290,20)
+
+
+  image(video, 158, 370, 340, 280);
   noStroke();
   fill(255, 0, 0);
 }
 
 function drawbot(){
 
+
   if(prediction < 20 ){
-    image(bot1,0,0,900,900)
+    image(door,0,0,900,900)
+    image(bot1,0,0,900,900);
     savedTime = millis(); 
   }
   else if (prediction >= 20 && prediction <40 ){
-    image(bot2,0,0,900,900)
+    image(door,0,0,900,900);
+    image(bot2,0,0,900,900);
     savedTime = millis(); 
   }
   else if (prediction >= 40 && prediction <60 ){
-    image(bot3,0,0,900,900)
+    image(door,0,0,900,900);
+    image(bot3,0,0,900,900);
     savedTime = millis(); 
   }
-  else if (prediction >= 60 && prediction <80 ){
-    image(bot4,0,0,900,900)
+  else if (prediction >= 60 && prediction <75 ){
+    image(door,0,0,900,900);
+    image(bot4,0,0,900,900);
     savedTime = millis(); 
   }
-  else if (prediction >= 80 && prediction <110 ){
-    image(bot5,0,0,900,900)
-    let passedTime = millis() - savedTime;
-    let timerXpos = map(passedTime, 0, 5000, 0, width);
-    fill(255);
-    ellipse(timerXpos, 45, 35, 35);
+  else if (prediction >= 75 && prediction <110 ){
+    image(bot5,0,0,900,900);
+    DoorEndingAnimation();
+  }
 
-    console.log(passedTime);    
-      // Has five seconds passed?
-    if (passedTime > totalTime) {
-    console.log("5 seconds have passed!");
-    savedTime = millis(); // Save the current time to restart the timer!
-    gameState= "END";
+      //draw text
+      textFont(clubFont);
+      fill(mainColor);
+      textAlign(CENTER);
+      textSize(19);
+      text(input_text1 + " Club", 670, 105);
+  
+      //draw rect bar on the right
+      let predictionX = map(prediction,0,100,0,290);
+
+      // rect(184,757,290,20)
+
+      rect(184,757,predictionX,20)
+}
+
+function playBotSound(sound_number){
+
+  let num = sound_number;
+
+  let passedTimeSound = millis() - savedTimeSound;
+  // Has five seconds passed?
+  if (passedTimeSound > 5000) {
+
+  switch (num) {
+    case "1":
+      S1_notBelong.play();
+      break;
+    case "2":
+      S1_NotOurType.play();
+      break;
+    case "3":
+      S3_Interesting.play();
+      break;
+    case "DEBUG":
+      break;
+    default:
+      S2_Ha.play();
+      break;
   }
-  }
+
+  savedTimeSound = millis(); // Save the current time to restart the timer!
+}
+
+}
+
+function DoorEndingAnimation(){
+
+  let passedTime = millis() - savedTime;
+  let doorYpos = map(passedTime, 0, 5000, 0, -700);
+
+  image(door,0,doorYpos,900,900);
+  image(bot5,0,0,900,900)
+
+  ellipse(500, doorYpos, 35, 35);
+
+  // Has five seconds passed?
+  if (passedTime > totalTime) {
+  console.log("5 seconds have passed!");
+  S_Welcome.play();
+  savedTime = millis(); // Save the current time to restart the timer!
+  gameState= "END";
+}
+
 }
 
 // A function to be called when the model has been loaded
@@ -181,6 +274,7 @@ function setupButtons() {
 
   select('#buttonPredict').mousePressed(function() {
     gameState = "BOUNCER_ACTIVE";
+    S_Next.play();
     predict();
   });
 
@@ -195,6 +289,13 @@ function gotResults(err, result) {
   predict();
 }
 
+function keyPressed() {
+  if (keyCode === LEFT_ARROW) {
+    gameState = "DEBUG";
+  } else if (keyCode === RIGHT_ARROW) {
+    gameState = "BOUNCER_ACTIVE";
+  }
+}
 
 /* New version from github
 
