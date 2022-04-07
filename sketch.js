@@ -220,8 +220,6 @@ function DoorEndingAnimation(){
   image(door,0,doorYpos,900,900);
   image(bot5,0,0,900,900)
 
-  ellipse(500, doorYpos, 35, 35);
-
   // Has five seconds passed?
   if (passedTime > totalTime) {
   console.log("5 seconds have passed!");
