@@ -342,6 +342,17 @@ function playBotSound(sound_number){
 
 }
 
+
+function updateValue(){
+
+  input_text2 = document.getElementById("input2");
+  input_text1 = document.getElementById("input1").value;
+
+  input_text2.value = "Not " + input_text1;
+
+
+}
+
 function DoorEndingAnimation(){
 
   let passedTime = millis() - savedTime;

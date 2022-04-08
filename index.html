@@ -41,7 +41,7 @@
       </p>
 
       <div>
-        <input id="input1" type="text" class="no-outline" maxlength="18" placeholder="ex). Happy">
+        <input id="input1" type="text" class="no-outline" maxlength="18" placeholder="ex). Happy" autofocus onchange="updateValue()">
       </div>
       <br>
 
@@ -50,17 +50,17 @@
       </div>
       <br>
       <div>
-        <input id="input2" type="text" class="no-outline" placeholder="ex). Not Happy">
+        <input id="input2" type="text" class="no-outline"  value="" disabled>
       </div>
       <div id="button_box">
 
         <div id="add_image_box">
-          <button class="btn" id="addSample">+ Add this picture</button>
-          <p><span id="amountOfSamples">0</span> Training Images</p>
+          <button class="btn" id="addSample">+ Teach this picture</button>
+          <p><span id="amountOfSamples">0</span> Training Imßages</p>
         </div>
         <div id="training_button_box">
           <p><button id="train">Train</button><span id="loss"></span></p>
-          <button id="buttonPredict">Bouncer Start!</button>
+          <button id="buttonPredict">Bouncer Mode Start!</button>
           <h6><span id="modelStatus">Loading base model...</span> | <span id="videoStatus">Loading video...</span></h6>
 
         </div>
