@@ -9,6 +9,7 @@ ml5 Example
 Creating a regression extracting features of MobileNet. Build with p5js.
 === */
 
+
 let featureExtractor;
 let regressor;
 let video;
@@ -43,8 +44,11 @@ let explanation_gameactive;
 let input_text1 = "default";
 let input_text2 = "default2";
 
+var deviceList = [];
+
 
 function preload() {
+  navigator.mediaDevices.enumerateDevices().then(getDevices);
   clubFont = loadFont('./assets/GT-Cinetype-Mono.otf');
 
   door = loadImage('./images/AI-Bouncer-Door.png');
@@ -81,6 +85,17 @@ function preload() {
 
 }
 
+function getDevices(devices) {
+  // console.log(devices); // To see all devices
+  arrayCopy(devices, deviceList);
+  for (let i = 0; i < devices.length; ++i) {
+    let deviceInfo = devices[i];
+    if (deviceInfo.kind == 'videoinput') {
+      console.log("Device name :", devices[i].label);
+      console.log("DeviceID :", devices[i].deviceId);
+    }
+  }
+}
 
 function changeUI(GAMESTATE){
 
@@ -118,6 +133,11 @@ function changeUI(GAMESTATE){
 }
 
 function setup() {
+
+  for (let x = 0; x < deviceList.length; x++) {
+    console.log(deviceList[x]);
+  }
+
   mainColor = color(0, 250, 200);
   subColor = color(255, 0, 255);
 
@@ -127,14 +147,27 @@ function setup() {
     myCanvas.parent("right_p5js_container");
 
   // Create a video element
-    
-   var constraints = {
+
+  console.log(deviceList[9].label);
+
+  var constraints = {
     audio: false,
     video: {
-      facingMode: "user",
+    deviceId: {
+      exact: deviceList[8].deviceId,
       frameRate: 15
+
+      },
     }
-   }; 
+  };
+    
+  //  var constraints = {
+  //   audio: false,
+  //   video: {
+  //     facingMode: "environment",
+  //     frameRate: 15
+  //   }
+  //  }; 
     
   video = createCapture(constraints);
   video.elt.setAttribute('playsinline', '');
@@ -179,6 +212,12 @@ function draw() {
       input_text2 = document.getElementById("input2").value;
       headline_gameactive = document.getElementById("headline_active");
       headline_gameactive.innerHTML = "Can you pass the AI Bouncer and enter the " + input_text1 + " club ?";
+      explanation_gameactive = document.getElementById("explanation_active");
+      explanation_gameactive.innerHTML = "AI bouncer is trained to welcome anything that looks "+input_text1+ ". Try to figure out what that is, or train one yourself! "
+
+
+      //AI bouncer is trained to welcome anything that looks Artsy. Try to figure out what that is, or train one yourself!
+
       
       drawbot();
       drawTexts();

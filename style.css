@@ -47,6 +47,8 @@ h1{
   max-width: 1400px;
   min-height: 900px;
   margin: auto;
+  margin-top: 100px;
+
   display: flex;
   background-color: rgb(15, 40, 35);
 }
