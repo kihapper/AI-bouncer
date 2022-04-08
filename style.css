@@ -36,6 +36,13 @@ h1{
 
 }
 
+#explanation_training{
+  font-size: 20px;
+  max-width: 400px;
+  letter-spacing: 2px;
+  line-height: 160%;
+}
+
 #explanation_active{
   font-size: 18px;
   letter-spacing: 2px;
@@ -107,18 +114,18 @@ h1{
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: gray;
+  color: rgb(164, 164, 164);
   font-family: 'bouncer_mono_font', Fallback, monospace;
   font-size: 20px;
 
 }
 ::-moz-placeholder { /* Firefox 19+ */
-  color: gray;
+  color: rgb(192, 192, 192);
   font-family: 'bouncer_mono_font', Fallback, monospace;
 
 }
 :-ms-input-placeholder { /* IE 10+ */
-  color: gray;
+  color: rgb(182, 182, 182);
   font-family: 'bouncer_mono_font', Fallback, monospace;
 
 }

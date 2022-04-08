@@ -105,6 +105,14 @@ function changeUI(GAMESTATE){
   let restart_btn = document.getElementById("restart_btn");
 
   switch (GAMESTATE) {
+
+    case "TRAINING1":
+      leftUI_training.style.display = "flex";  
+      leftUI_bounce_game.style.display = "none";  
+      console.log( "TRAINING1");  
+
+      break;
+
     case "INITIAL":
       leftUI_training.style.display = "flex";  
       leftUI_bounce_game.style.display = "none";  
