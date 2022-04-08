@@ -13,11 +13,34 @@ body {
   background-color: rgb(15, 40, 35);
 }
 
+h1{
+  font-family: 'bouncer_mono_font', Fallback, monospace;
+  letter-spacing: 2.5px;
+  line-height: 160%;
+  font-size: 40px;
+}
+
 #main_title{
   text-align: center;
   line-height: 1.5em;
   max-width: 350px;
   margin-bottom: 70px;
+}
+
+
+#headline_active{
+  margin-top: 230px;
+  letter-spacing: 2.5px;
+  line-height: 150%;
+  font-size: 38px;
+
+}
+
+#explanation_active{
+  font-size: 18px;
+  letter-spacing: 2px;
+  line-height: 160%;
+  margin-bottom: 80px;
 }
 
 #main_container{
@@ -36,8 +59,19 @@ body {
  display: flex;
  flex-direction: column;
  align-items: center;
-
 }
+
+#left_UI_container_bouncer_active{
+  padding:30px;
+ min-width: 500px;
+ min-height: 900px;
+ background-color: rgb(15, 40, 35);
+ flex-direction: column;
+ align-items: center;
+ display: none;
+}
+
+
 
 #right_p5js_container{
   min-width: 900px;
@@ -102,11 +136,14 @@ input[type=range][orient=vertical]
 
 
 .btn {
-  color: white;
-  background-color: #666;
+  color: #00fac8;
+  background-color: rgb(24, 52, 46);
+  border-color: #00fac8;
+  border-style: solid;
+  border-width: 2px;
+  
   font-family: 'bouncer_mono_font', Fallback, monospace;
   font-size: 20px;
-  text-decoration: none;
   position: relative;
   padding: 15px 30px;
   /* -webkit-box-shadow: 2px 2px 0 rgb(179, 179, 179);
@@ -117,9 +154,13 @@ input[type=range][orient=vertical]
 }
 
 .btn:hover {
-
+  background-color: rgb(4, 104, 83);
 }
 
+.btn:active {
+  background-color: rgb(22, 27, 26);
+
+}
 
 
   video{
@@ -129,10 +170,4 @@ input[type=range][orient=vertical]
   p{
     display: inline;
     font-size: 14px;
-  }
-  h6{
-    margin: 4px;
-    font-weight: lighter;
-    font-size: 14px;
-    margin-bottom: 10px;
   }

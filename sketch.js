@@ -19,6 +19,7 @@ let positionX = 140;
 let prediction = 0;
 
 let gameState = "INITIAL"
+let prevGameState;
 
 let savedTime;
 let savedTimeSound;
@@ -27,6 +28,8 @@ let totalTime = 4000;
 let countEllipse = 0;
 
 let mainColor;
+let subColor;
+
 
 // var gif1_loadImg, gif1_createImg;
 
@@ -34,8 +37,11 @@ let mainColor;
 
 
 let title_text;
-let input_text1;
-let input_text2;
+let headline_gameactive;
+let explanation_gameactive;
+
+let input_text1 = "default";
+let input_text2 = "default2";
 
 
 function preload() {
@@ -75,8 +81,46 @@ function preload() {
 
 }
 
+
+function changeUI(GAMESTATE){
+
+  let leftUI_training = document.getElementById("left_UI_container");
+  let leftUI_bounce_game = document.getElementById("left_UI_container_bouncer_active");
+  let retrain_btn = document.getElementById("retrain_btn");
+  let restart_btn = document.getElementById("restart_btn");
+
+  switch (GAMESTATE) {
+    case "INITIAL":
+      leftUI_training.style.display = "flex";  
+      leftUI_bounce_game.style.display = "none";  
+      console.log( "INITIAL");  
+
+      break;
+    case "BOUNCER_ACTIVE": 
+    leftUI_training.style.display = "none";    
+    leftUI_bounce_game.style.display = "flex";    
+    restart_btn.style.display = "none";
+    console.log( "BOUNCER_ACTIVE");  
+
+
+      break;
+    case "END":
+      restart_btn.style.display = "block";
+      console.log( "END");  
+
+
+      break;
+    case "DEBUG":
+
+      break;
+    default:
+}
+}
+
 function setup() {
   mainColor = color(0, 250, 200);
+  subColor = color(255, 0, 255);
+
   savedTime = millis(); // since we've put this inside setup(), millis() stops running once draw() begins
   savedTimeSound =  millis();
   var myCanvas = createCanvas(900, 900);
@@ -105,7 +149,6 @@ function setup() {
   regressor = featureExtractor.regression(video, videoReady);
   // Create the UI buttons
 
-  title_text = document.getElementById("main_title");
 
 
   setupButtons();
@@ -113,7 +156,11 @@ function setup() {
 
 function draw() {
 
-  
+  if(prevGameState != gameState){
+    changeUI(gameState);
+  }
+  prevGameState = gameState
+
   // updates animation frames by using an html
   // img element, positioning it over top of
   // the canvas.
@@ -123,19 +170,32 @@ function draw() {
     // Calculate how much time has passed
   switch (gameState) {
     case "INITIAL":
+      // changeUI("INITIAL");
       image(bot0,0,0,900,900);
       break;
     case "BOUNCER_ACTIVE":
+      // changeUI("BOUNCER_ACTIVE");
       input_text1 = document.getElementById("input1").value;
       input_text2 = document.getElementById("input2").value;
-      title_text.innerHTML = "Get Past the Bouncer by looking " + input_text1 + " !!";
+      headline_gameactive = document.getElementById("headline_active");
+      headline_gameactive.innerHTML = "Can you pass the AI Bouncer and enter the " + input_text1 + " club ?";
       
       drawbot();
+      drawTexts();
       // playBotSound();
       break;
     case "END":
+      input_text1 = document.getElementById("input1").value;
+      input_text2 = document.getElementById("input2").value;
+      headline_gameactive = document.getElementById("headline_active");
+      explanation_gameactive = document.getElementById("explanation_active");
+      headline_gameactive.innerHTML = "Congratulations! The AI bouncer welcomes you into the " + input_text1 + " club!";
+      explanation_active.innerHTML = "You have figured out the biases of how AI bouncer was trained. Restart the same bouncer for the next person or train one yourself! ";
+
+
       image(end_door1,0,0,900,900);
       image(bot5,0,0,900,900);
+      drawTexts();
       break;
     case "DEBUG":
       DoorEndingAnimation();
@@ -182,25 +242,27 @@ function drawbot(){
     DoorEndingAnimation();
   }
 
-      //draw text
-      textFont(clubFont);
-      fill(mainColor);
-      textAlign(CENTER);
-      textSize(19);
-      text(input_text1 + " Club", 670, 105);
 
-      //draw rect bar on the right
-      let predictionX = map(prediction,0,100,0,290);
+}
 
-
-      let bg_mainColor = color(0, 250, 200, 100);
-      fill(bg_mainColor);
-      rect(184,757,predictionX,20)
-
-      fill(mainColor);
-      textSize(17);
-      text(input_text1 +"-o-meter", 330, 772);
-
+function drawTexts(){
+        //draw text
+        textFont(clubFont);
+        fill(subColor);
+        textAlign(CENTER);
+        textSize(19);
+        text(input_text1 + " Club", 670, 105);
+  
+        //draw rect bar on the right
+        let predictionX = map(prediction,0,100,0,290);
+  
+        let bg_mainColor = color(0, 250, 200, 100);
+        fill(bg_mainColor);
+        rect(184,757,predictionX,20)
+  
+        fill(mainColor);
+        textSize(17);
+        text(input_text1 +"-o-meter", 330, 772);
 }
 
 function playBotSound(sound_number){
@@ -288,11 +350,24 @@ function setupButtons() {
     });
   });
 
+  //Retrain Button, it restarts the whole thing, for now
+  select('#retrain_btn').mousePressed(function() {
+    location.reload();
+  });
+
+    //Retrain Button, it restarts the whole thing, for now
+    select('#restart_btn').mousePressed(function() {
+      gameState = "BOUNCER_ACTIVE";
+      changeUI(gameState);
+      S2_Comeagain.play();
+    });
+
   // Predict Button
   // select('#buttonPredict').mousePressed(predict);
 
   select('#buttonPredict').mousePressed(function() {
     gameState = "BOUNCER_ACTIVE";
+    changeUI(gameState);
     S_Next.play();
     predict();
   });
