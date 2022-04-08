@@ -25,7 +25,7 @@ let prevGameState;
 let savedTime;
 let savedTimeSound;
 
-let totalTime = 4000;
+let totalTime = 3000;
 let countEllipse = 0;
 
 let mainColor;
@@ -264,27 +264,27 @@ function draw() {
 function drawbot(){
 
 
-  if(prediction < 20 ){
+  if(prediction < 10 ){
     image(door,0,0,900,900)
     image(bot1,0,0,900,900);
     savedTime = millis(); 
   }
-  else if (prediction >= 20 && prediction <40 ){
+  else if (prediction >= 10 && prediction <30 ){
     image(door,0,0,900,900);
     image(bot2,0,0,900,900);
     savedTime = millis(); 
   }
-  else if (prediction >= 40 && prediction <60 ){
+  else if (prediction >= 30 && prediction <50 ){
     image(door,0,0,900,900);
     image(bot3,0,0,900,900);
     savedTime = millis(); 
   }
-  else if (prediction >= 60 && prediction <75 ){
+  else if (prediction >= 50 && prediction <70 ){
     image(door,0,0,900,900);
     image(bot4,0,0,900,900);
     savedTime = millis(); 
   }
-  else if (prediction >= 75 && prediction <110 ){
+  else if (prediction >= 70 && prediction <110 ){
     image(bot5,0,0,900,900);
     DoorEndingAnimation();
   }
