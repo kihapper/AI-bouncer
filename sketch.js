@@ -148,13 +148,13 @@ function setup() {
 
   // Create a video element
 
-  console.log(deviceList[9].label);
+  console.log(deviceList[1].label);
 
   var constraints = {
     audio: false,
     video: {
     deviceId: {
-      exact: deviceList[8].deviceId,
+      exact: deviceList[1].deviceId,
       frameRate: 15
 
       },
