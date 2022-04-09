@@ -237,6 +237,21 @@ function draw() {
     case "INITIAL":
       // changeUI("INITIAL");
       image(bot0,0,0,900,900);
+      input_text1 = document.getElementById("input1").value;
+      fill(color(15, 40, 35));
+      rect(550, 80,230,100)
+      textFont(clubFont);
+      fill(subColor);
+      textAlign(CENTER);
+      textSize(19);      
+      if(input_text1 != ""){
+      text(input_text1 + " Club", 670, 150);
+    }
+
+    textSize(21);      
+    text( "Training In Process", 670, 120);
+
+
       break;
     case "BOUNCER_ACTIVE":
       // changeUI("BOUNCER_ACTIVE");
@@ -393,7 +408,7 @@ function updateValue(){
 function DoorEndingAnimation(){
 
   let passedTime = millis() - savedTime;
-  let doorYpos = map(passedTime, 0, 5000, 0, -700);
+  let doorYpos = map(passedTime, 0, totalTime, 0, -700);
 
   image(door,0,doorYpos,900,900);
   image(bot5,0,0,900,900)
