@@ -109,24 +109,24 @@ function setup() {
   // Create a video element
   console.log(deviceList[1].label);
 
-  var constraints = {
-    audio: false,
-    video: {
-    deviceId: {
-      exact: deviceList[1].deviceId,
-      frameRate: 15
-
-      },
-    }
-  };
-    
-  //  var constraints = {
+  // var constraints = {
   //   audio: false,
   //   video: {
-  //     facingMode: "environment",
+  //   deviceId: {
+  //     exact: deviceList[1].deviceId,
   //     frameRate: 15
+
+  //     },
   //   }
-  //  }; 
+  // };
+    
+   var constraints = {
+    audio: false,
+    video: {
+      facingMode: "environment",
+      frameRate: 15
+    }
+   }; 
     
   video = createCapture(constraints);
   video.elt.setAttribute('playsinline', '');
@@ -291,25 +291,30 @@ function drawbot(){
   if(prediction < 10 ){
     image(door,0,0,900,900)
     image(bot1,0,0,900,900);
+    playBotSound("1");
     savedTime = millis(); 
   }
   else if (prediction >= 10 && prediction <30 ){
     image(door,0,0,900,900);
     image(bot2,0,0,900,900);
+    playBotSound("1");
     savedTime = millis(); 
   }
   else if (prediction >= 30 && prediction <50 ){
     image(door,0,0,900,900);
     image(bot3,0,0,900,900);
+    playBotSound("2");
     savedTime = millis(); 
   }
   else if (prediction >= 50 && prediction <70 ){
     image(door,0,0,900,900);
     image(bot4,0,0,900,900);
+    playBotSound("2");
     savedTime = millis(); 
   }
   else if (prediction >= 70 && prediction <110 ){
     image(bot5,0,0,900,900);
+    playBotSound("3");
     DoorEndingAnimation();
   }
 
@@ -340,9 +345,11 @@ function playBotSound(sound_number){
 
   let num = sound_number;
 
+
   let passedTimeSound = millis() - savedTimeSound;
   // Has five seconds passed?
-  if (passedTimeSound > 5000) {
+  if (passedTimeSound > 8000) {
+    console.log("sound_num :" + num);
 
   switch (num) {
     case "1":
