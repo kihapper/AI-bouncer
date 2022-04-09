@@ -46,6 +46,9 @@ let input_text2 = "default2";
 
 var deviceList = [];
 
+let train_button = document.getElementById("train");
+let predict_button = document.getElementById("buttonPredict");
+
 
 function preload() {
   navigator.mediaDevices.enumerateDevices().then(getDevices);
@@ -85,61 +88,6 @@ function preload() {
 
 }
 
-function getDevices(devices) {
-  // console.log(devices); // To see all devices
-  arrayCopy(devices, deviceList);
-  for (let i = 0; i < devices.length; ++i) {
-    let deviceInfo = devices[i];
-    if (deviceInfo.kind == 'videoinput') {
-      console.log("Device name :", devices[i].label);
-      console.log("DeviceID :", devices[i].deviceId);
-    }
-  }
-}
-
-function changeUI(GAMESTATE){
-
-  let leftUI_training = document.getElementById("left_UI_container");
-  let leftUI_bounce_game = document.getElementById("left_UI_container_bouncer_active");
-  let retrain_btn = document.getElementById("retrain_btn");
-  let restart_btn = document.getElementById("restart_btn");
-
-  switch (GAMESTATE) {
-
-    case "TRAINING1":
-      leftUI_training.style.display = "flex";  
-      leftUI_bounce_game.style.display = "none";  
-      console.log( "TRAINING1");  
-
-      break;
-
-    case "INITIAL":
-      leftUI_training.style.display = "flex";  
-      leftUI_bounce_game.style.display = "none";  
-      console.log( "INITIAL");  
-
-      break;
-    case "BOUNCER_ACTIVE": 
-    leftUI_training.style.display = "none";    
-    leftUI_bounce_game.style.display = "flex";    
-    restart_btn.style.display = "none";
-    console.log( "BOUNCER_ACTIVE");  
-
-
-      break;
-    case "END":
-      restart_btn.style.display = "block";
-      console.log( "END");  
-
-
-      break;
-    case "DEBUG":
-
-      break;
-    default:
-}
-}
-
 function setup() {
 
   for (let x = 0; x < deviceList.length; x++) {
@@ -154,8 +102,11 @@ function setup() {
   var myCanvas = createCanvas(900, 900);
     myCanvas.parent("right_p5js_container");
 
-  // Create a video element
 
+
+
+
+  // Create a video element
   console.log(deviceList[1].label);
 
   var constraints = {
@@ -190,10 +141,83 @@ function setup() {
   regressor = featureExtractor.regression(video, videoReady);
   // Create the UI buttons
 
-
-
   setupButtons();
+//UI elements
+train_button.style.display = "none"
+predict_button.style.display = "none"
+
 }
+
+function getDevices(devices) {
+  // console.log(devices); // To see all devices
+  arrayCopy(devices, deviceList);
+  for (let i = 0; i < devices.length; ++i) {
+    let deviceInfo = devices[i];
+    if (deviceInfo.kind == 'videoinput') {
+      console.log("Device name :", devices[i].label);
+      console.log("DeviceID :", devices[i].deviceId);
+    }
+  }
+}
+
+function changeUI(GAMESTATE){
+
+  let leftUI_training = document.getElementById("left_UI_container");
+  let leftUI_bounce_game = document.getElementById("left_UI_container_bouncer_active");
+  let retrain_btn = document.getElementById("retrain_btn");
+  let restart_btn = document.getElementById("restart_btn");
+
+  let training_bar_box = document.getElementById("slider_box");
+  let training_button_box = document.getElementById("button_box");
+
+  let input2_box = document.getElementById("input2");
+
+
+  switch (GAMESTATE) {
+
+    case "INITIAL":
+      // training_bar_box.style.display = "none";  
+      // training_button_box.style.display = "none";  
+      // input2_box.style.display = "none";  
+
+      leftUI_training.style.display = "flex";  
+      leftUI_bounce_game.style.display = "none";  
+      console.log( "INITIAL");  
+
+      break;
+
+      case "TRAINING1":
+        leftUI_training.style.display = "flex";  
+        leftUI_bounce_game.style.display = "none";  
+
+        training_bar_box.style.display = "none";  
+        training_button_box.style.display = "none";  
+        input2_box.style.display = "none";  
+        console.log( "TRAINING1");  
+  
+        break;
+
+    case "BOUNCER_ACTIVE": 
+    leftUI_training.style.display = "none";    
+    leftUI_bounce_game.style.display = "flex";    
+    restart_btn.style.display = "none";
+    console.log( "BOUNCER_ACTIVE");  
+
+
+      break;
+    case "END":
+      restart_btn.style.display = "block";
+      console.log( "END");  
+
+
+      break;
+    case "DEBUG":
+
+      break;
+    default:
+}
+}
+
 
 function draw() {
 
@@ -394,6 +418,9 @@ function setupButtons() {
   select('#addSample').mousePressed(function() {
     regressor.addImage(slider.value());
     select('#amountOfSamples').html(samples++);
+    if(samples > 20){
+      train_button.style.display = "block"
+    }
   });
 
   // Train Button
@@ -404,6 +431,8 @@ function setupButtons() {
         select('#loss').html('Loss: ' + loss);
       } else {
         select('#loss').html('Done Training! Final Loss: ' + loss);
+        train_button.style.display = "none"
+        predict_button.style.display = "block"
       }
     });
   });
