@@ -109,24 +109,24 @@ function setup() {
   // Create a video element
   console.log(deviceList[1].label);
 
-  var constraints = {
-    audio: false,
-    video: {
-    deviceId: {
-      exact: deviceList[1].deviceId,
-      frameRate: 15
-
-      },
-    }
-  };
-    
-  //  var constraints = {
+  // var constraints = {
   //   audio: false,
   //   video: {
-  //     facingMode: "environment",
+  //   deviceId: {
+  //     exact: deviceList[1].deviceId,
   //     frameRate: 15
+
+  //     },
   //   }
-  //  }; 
+  // };
+    
+   var constraints = {
+    audio: false,
+    video: {
+      facingMode: "environment",
+      frameRate: 15
+    }
+   }; 
     
   video = createCapture(constraints);
   video.elt.setAttribute('playsinline', '');
